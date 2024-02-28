@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/done_menu"
+        android:icon="@drawable/done_24px"
+        android:title="완료"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/all_delete_meun"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:title="초기화"
+        app:showAsAction="always" />
+</menu>

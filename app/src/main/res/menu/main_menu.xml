@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/extra_memo_menu"
+        android:icon="@drawable/add_24px"
+        android:title="추가"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/all_menu_memo"
+        android:icon="@drawable/done_24px"
+        android:title="전체 메뉴"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/calender_menu"
+        android:icon="@drawable/calendar_month_24px"
+        android:title="달력 메뉴"
+        app:showAsAction="always" />
+</menu>
