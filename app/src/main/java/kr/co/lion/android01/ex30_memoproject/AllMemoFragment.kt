@@ -97,6 +97,12 @@ class AllMemoFragment : Fragment() {
             }
         }
     }
+    fun reloadRecyclerView(){
+        //데이터를 읽어온다
+        memoList = InfoDAO.selectAllInfo(mainActivity)
+        //RecyclerView를 갱신한다
+        fragmentAllMemoBinding.recyclerview2.adapter?.notifyDataSetChanged()
+    }
 }
 
 

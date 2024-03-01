@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import kr.co.lion.android01.ex30_memoproject.databinding.FragmentModifyBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class ModifyFragment : Fragment() {
 
@@ -40,11 +42,13 @@ class ModifyFragment : Fragment() {
                 setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.complete_menu -> {
+                            var title1 = arguments?.getString("title")!!
+                            InfoDAO.deleteInfo(mainActivity, title1)
                             var chk = checkOK()
                             if (chk == true){
                                 inputData()
                                 enum.showDiaLog(mainActivity, "메모 수정", "메모를 수정하시겠습니까?"){ dialogInterface: DialogInterface, i: Int ->
-                                    mainActivity.removeFragment(FragmentName.MODIFY_FRAGMENT)
+                                    mainActivity.replaceFragment(FragmentName.MAIN_FRAGMENT, true, true, null)
                                 }
                                 enum.hideSoftInput(mainActivity)
                             }
@@ -79,8 +83,15 @@ class ModifyFragment : Fragment() {
     //내용을 입력한다
     private fun inputData(){
         fragmentModifyBinding.apply {
+
             var title = textModifyTitle.text.toString()
+            var simple = SimpleDateFormat("yyyy-MM-dd")
+            var date = simple.format(Date())
             var contents = textModifyContents.text.toString()
+
+            var memoModel = Info(0, title, date, contents)
+
+            InfoDAO.insertInfo(mainActivity, memoModel)
 
 
         }

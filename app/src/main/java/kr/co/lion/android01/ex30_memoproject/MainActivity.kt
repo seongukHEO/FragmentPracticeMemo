@@ -143,6 +143,18 @@ class MainActivity : AppCompatActivity() {
             inputMethodManager.showSoftInput(view, 0)
         }
     }
+    // RecyclerView 갱신 메서드
+    fun reloadRecyclerView(){
+        if(newFragment is CalenderFragment){
+            (newFragment as CalenderFragment).reloadRecyclerView()
+        }
+    }
+
+    fun reloadRecyclerView2(){
+        if(newFragment is AllMemoFragment){
+            (newFragment as AllMemoFragment).reloadRecyclerView()
+        }
+    }
 }
 
 
