@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import kr.co.lion.android01.ex30_memoproject.databinding.FragmentInputBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class InputFragment : Fragment() {
 
@@ -44,9 +46,19 @@ class InputFragment : Fragment() {
                         R.id.done_menu -> {
                             var chk = checkOK()
                             if (chk == true){
-                                setEvent()
-                                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT, true, true, null)
-                                enum.hideSoftInput(mainActivity)
+                                fragmentInputBinding.apply {
+//                                    //글의 title을 가져온다
+//                                    var title = titleInputText.text.toString()
+//
+//                                    //번들에 담아준다
+//                                    val bundle = Bundle()
+//                                    bundle.putString("title", title)
+//                                    setEvent()
+//                                    mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT, true, true, bundle)
+                                    mainActivity.removeFragment(FragmentName.INPUT_FRAGMENT)
+                                    setEvent()
+                                    enum.hideSoftInput(mainActivity)
+                                }
                             }
                         }
                         R.id.all_delete_meun -> {
@@ -86,8 +98,10 @@ class InputFragment : Fragment() {
         fragmentInputBinding.apply {
             var title = titleInputText.text.toString()
             var contents = contentsInputText.text.toString()
+            var simple = SimpleDateFormat("yyyy-MM-dd")
+            var date = simple.format(Date())
 
-            var str = Info(1, title, null, contents)
+            var str = Info(0, title, date, contents)
             InfoDAO.insertInfo(mainActivity, str)
         }
     }

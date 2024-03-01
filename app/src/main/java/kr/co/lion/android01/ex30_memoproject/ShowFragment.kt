@@ -47,11 +47,20 @@ class ShowFragment : Fragment() {
                 setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.modify_menu -> {
-                            mainActivity.replaceFragment(FragmentName.MODIFY_FRAGMENT, true, true, null)
+                            var title = arguments?.getString("title")
+
+                            var bundle = Bundle()
+                            bundle.putString("title", title)
+
+                            mainActivity.replaceFragment(FragmentName.MODIFY_FRAGMENT, true, true, bundle)
                         }
                         R.id.delete_menu -> {
                             enum.showDiaLog(mainActivity, "메모 삭제", "메모를 삭제하시겠습니까?"){ dialogInterface: DialogInterface, i: Int ->
-                                mainActivity.replaceFragment(FragmentName.MAIN_FRAGMENT, true, true, null)
+                                var title = arguments?.getString("title")
+                                if (title != null){
+                                    InfoDAO.deleteInfo(mainActivity, title!!)
+                                    mainActivity.replaceFragment(FragmentName.MAIN_FRAGMENT, true, true, null)
+                                }
                             }
                         }
                     }
@@ -66,11 +75,13 @@ class ShowFragment : Fragment() {
     //내용을 입력한다
     fun inputData(){
         fragmentShowBinding.apply {
-            var str = InfoDAO.selectOneInfo(mainActivity, idx = 1)
-            if (str != null){
-                notextTitle.setText("${str?.title}")
-                notextDate.setText("2024-02-28")
-                nocontentsText.setText("안녕하세용")
+            var title = arguments?.getString("title")
+
+            if (title != null){
+                var memoInfo = InfoDAO.selectAllTitle(mainActivity, title)
+                notextTitle.setText("${memoInfo?.title}")
+                notextDate.setText("${memoInfo?.date}")
+                nocontentsText.setText("${memoInfo?.contents}")
             }
         }
     }

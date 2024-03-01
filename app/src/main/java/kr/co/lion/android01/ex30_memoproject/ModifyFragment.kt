@@ -65,10 +65,14 @@ class ModifyFragment : Fragment() {
     //전달받은 값을 입력받는다
     private fun getData(){
         fragmentModifyBinding.apply {
-            textModifyTitle.setText("이거지이거지")
-            textModifyContents.setText("이거야이거!!")
 
+            var title1 = arguments?.getString("title")
+            if (title1 != null){
+                var title = InfoDAO.selectAllTitle(mainActivity, title1)
 
+                textModifyTitle.setText("${title?.title}")
+                textModifyContents.setText("${title?.contents}")
+            }
         }
     }
 

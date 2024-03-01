@@ -17,13 +17,23 @@ class AllMemoFragment : Fragment() {
     lateinit var fragmentAllMemoBinding: FragmentAllMemoBinding
     lateinit var mainActivity: MainActivity
 
+    lateinit var memoList:MutableList<Info>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         fragmentAllMemoBinding = FragmentAllMemoBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
         initView()
+        saveDate()
         return fragmentAllMemoBinding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fragmentAllMemoBinding.apply {
+            recyclerview2.adapter?.notifyDataSetChanged()
+        }
     }
 
 
@@ -35,6 +45,12 @@ class AllMemoFragment : Fragment() {
                 var deco = MaterialDividerItemDecoration(mainActivity, MaterialDividerItemDecoration.VERTICAL)
                 addItemDecoration(deco)
             }
+        }
+    }
+    //초기화
+    fun saveDate(){
+        fragmentAllMemoBinding.apply {
+            memoList = InfoDAO.selectAllInfo(mainActivity)
         }
     }
 
@@ -65,16 +81,19 @@ class AllMemoFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return 30
+            return memoList.size
         }
 
         override fun onBindViewHolder(holder: ViewHolderClass2, position: Int) {
-            holder.allmemoBinding.textAllMemoTitle.text = "메모 제목"
-            holder.allmemoBinding.textAllMemoDate.text = "2024-02-28"
+            holder.allmemoBinding.textAllMemoTitle.text = memoList[position].title
+            holder.allmemoBinding.textAllMemoDate.text = memoList[position].date
 
             //클릭했을 때
             holder.allmemoBinding.root.setOnClickListener {
-                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT, true, true, null)
+
+                var bundle = Bundle()
+                bundle.putString("title", memoList[position].title)
+                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT, true, true, bundle)
             }
         }
     }
