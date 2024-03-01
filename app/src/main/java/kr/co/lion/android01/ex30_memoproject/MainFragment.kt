@@ -25,8 +25,8 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         fragmentMainBinding = FragmentMainBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        replaceFragment(FragmentName2.CALENDER_FRAGMENT, false, false, null)
         setToolBar()
+        showMenu(mainActivity.mainSubFragmentName)
         return fragmentMainBinding.root
     }
 
@@ -46,15 +46,10 @@ class MainFragment : Fragment() {
 
                         }
                         R.id.all_menu_memo -> {
-                            replaceFragment(FragmentName2.ALL_MEMO_FRAGMENT, true, true, null)
-                            setMenuVisibility(false)
-
+                            showMenu(FragmentName2.ALL_MEMO_FRAGMENT)
                         }
                         R.id.calender_menu -> {
-                            replaceFragment(FragmentName2.CALENDER_FRAGMENT, true, true,null)
-                            setMenuVisibility(false)
-                            invalidateMenu()
-
+                            showMenu(FragmentName2.CALENDER_FRAGMENT)
                         }
                     }
                     true
@@ -157,6 +152,26 @@ class MainFragment : Fragment() {
 
         // 지정한 이름으로 있는 Fragment를 BackStack에서 제거한다.
         mainActivity.supportFragmentManager.popBackStack(name.str, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    //페이지에 따라 메모를 보이게 한다
+    fun showMenu(name:FragmentName2){
+        fragmentMainBinding.apply {
+            when(name){
+                FragmentName2.CALENDER_FRAGMENT -> {
+                    materialToolbar.menu.findItem(R.id.calender_menu).isVisible = false
+                    materialToolbar.menu.findItem(R.id.all_menu_memo).isVisible = true
+                }
+                FragmentName2.ALL_MEMO_FRAGMENT -> {
+                    materialToolbar.menu.findItem(R.id.calender_menu).isVisible = true
+                    materialToolbar.menu.findItem(R.id.all_menu_memo).isVisible = false
+                }
+            }
+            //지금 보이는 화면을 name에 담아준다
+            mainActivity.mainSubFragmentName = name
+            replaceFragment(name, false, false, null)
+
+        }
     }
 }
 

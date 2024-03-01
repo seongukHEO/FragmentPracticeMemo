@@ -10,7 +10,7 @@ class DBHelper(context: Context) :SQLiteOpenHelper(context, "Info.db", null, 1) 
         var sql = """create table InfoTable
             |(idx integer primary key autoincrement,
             |title text not null,
-            |date text not null,
+            |date text,
             |contents text not null)
         """.trimMargin()
         db?.execSQL(sql)

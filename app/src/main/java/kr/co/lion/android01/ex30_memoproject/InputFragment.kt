@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import kr.co.lion.android01.ex30_memoproject.databinding.FragmentInputBinding
 
 class InputFragment : Fragment() {
@@ -20,15 +21,10 @@ class InputFragment : Fragment() {
         fragmentInputBinding = FragmentInputBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
         setToolBar()
+        inputDataControll()
         return fragmentInputBinding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        fragmentInputBinding.apply {
-            enum.showSoftInput(titleInputText, mainActivity)
-        }
-    }
     //툴바 설정
     fun setToolBar(){
         fragmentInputBinding.apply {
@@ -46,13 +42,21 @@ class InputFragment : Fragment() {
                 setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.done_menu -> {
-                            mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT, true, true,null)
-
+                            var chk = checkOK()
+                            if (chk == true){
+                                setEvent()
+                                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT, true, true, null)
+                                enum.hideSoftInput(mainActivity)
+                            }
                         }
                         R.id.all_delete_meun -> {
                             fragmentInputBinding.apply {
                                 titleInputText.setText("")
                                 contentsInputText.setText("")
+
+                                titleLayout.error = null
+                                contentsLayout.error = null
+                                mainActivity.showSoftInput(titleInputText)
                             }
                         }
                     }
@@ -62,34 +66,63 @@ class InputFragment : Fragment() {
         }
     }
 
+    //입력요소 설정
+    fun inputDataControll(){
+        fragmentInputBinding.apply {
+            //화면이 시작되면 첫 번째 텍스트에 포커스를 준다
+            mainActivity.showSoftInput(titleInputText)
+
+            titleInputText.addTextChangedListener {
+                titleLayout.error = null
+            }
+            contentsInputText.addTextChangedListener {
+                contentsLayout.error = null
+            }
+        }
+    }
+
     //이벤트 설정
     fun setEvent(){
         fragmentInputBinding.apply {
             var title = titleInputText.text.toString()
             var contents = contentsInputText.text.toString()
+
+            var str = Info(1, title, null, contents)
+            InfoDAO.insertInfo(mainActivity, str)
         }
     }
 
     //유효성 검사
-    fun checkOK(){
+    fun checkOK() : Boolean{
         fragmentInputBinding.apply {
+            var emptyView:View? = null
+
             var title = titleInputText.text.toString()
             if (title.trim().isEmpty()){
-                enum.showDiaLog(mainActivity, "제목 입력 오류", "제목을 입력해주세요"){ dialogInterface: DialogInterface, i: Int ->
-                    enum.showSoftInput(titleInputText, mainActivity)
+                titleLayout.error = "메모 제목을 입력해주세요"
+                if (emptyView == null){
+                    emptyView = titleInputText
+                }else{
+                    titleLayout.error = null
                 }
-                return
             }
 
             var contents = contentsInputText.text.toString()
             if (contents.trim().isEmpty()){
-                enum.showDiaLog(mainActivity, "내용 입력 오류", "내용을 입력해주세요"){ dialogInterface: DialogInterface, i: Int ->
-                    enum.showSoftInput(contentsInputText, mainActivity)
+                contentsLayout.error = "메모 내용을 입력해주세요"
+                if (emptyView == null){
+                    emptyView = contentsInputText
+                }else{
+                    contentsInputText.error = null
                 }
-                return
             }
+            //비어있는 입력 요소가 있다면 포커스를 준다
+            if (emptyView != null){
+                mainActivity.showSoftInput(emptyView)
+                return false
+            }
+            return true
         }
-        //setEvent()
     }
 }
 

@@ -1,11 +1,13 @@
 package kr.co.lion.android01.ex30_memoproject
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.os.SystemClock
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.concurrent.thread
 
@@ -23,16 +25,13 @@ class enum {
 
         }
         //키보드를 올려준다
-        fun showSoftInput(view: View, context: Context){
-            // 포커스를 준다.
-            view.requestFocus()
-
-            thread {
-                SystemClock.sleep(1000)
-                val inputMethodManager = context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.showSoftInput(view, 0)
-            }
-        }
+//        fun showSoftInput(view: View){
+//            view.requestFocus()
+//            thread {
+//                SystemClock.sleep(200)
+//                var inputMethodManager = getSystemService
+//            }
+//        }
         //키보드를 내려준다
         fun hideSoftInput(activity: AppCompatActivity){
             //현재 포커스를 가지고있는 뷰가 있다면 키보드를 내린다

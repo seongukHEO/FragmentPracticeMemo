@@ -66,9 +66,12 @@ class ShowFragment : Fragment() {
     //내용을 입력한다
     fun inputData(){
         fragmentShowBinding.apply {
-            notextTitle.setText("오잉?")
-            notextDate.setText("2024-02-28")
-            nocontentsText.setText("안녕하세용")
+            var str = InfoDAO.selectOneInfo(mainActivity, idx = 1)
+            if (str != null){
+                notextTitle.setText("${str?.title}")
+                notextDate.setText("2024-02-28")
+                nocontentsText.setText("안녕하세용")
+            }
         }
     }
 }

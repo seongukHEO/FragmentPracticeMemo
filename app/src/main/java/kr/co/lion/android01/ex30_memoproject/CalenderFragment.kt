@@ -25,6 +25,7 @@ class CalenderFragment : Fragment() {
         mainActivity = activity as MainActivity
         initView()
         setEvent()
+        saveCalenderData()
         return fragmentCalenderBinding.root
     }
 
@@ -32,10 +33,30 @@ class CalenderFragment : Fragment() {
     fun setEvent(){
         fragmentCalenderBinding.apply {
             dateButton.setOnClickListener {
-                var currentDate = Calendar.getInstance()
-                var currentTimeInMillis = currentDate.timeInMillis
+                //달력의 시점을 현재 시점으로 맞춘다
+                calendarView.date = System.currentTimeMillis()
+                //이 값을 메인 엑티비티에 저장한다 왜냐 프라그먼트는 화면이 넘어가면 안에있는 제약이 날아간다고
+                //생각하면 된다
+                mainActivity.calenderNowTime = calendarView.date
+            }
+        }
+    }
 
-                calendarView.setDate(currentTimeInMillis, true, true)
+    //화면을 바꿔도 캘린더는 그대로 둔다!
+    fun saveCalenderData(){
+        fragmentCalenderBinding.apply {
+            calendarView.apply {
+                date = mainActivity.calenderNowTime
+
+                //캘린더의 위치가 바뀌면 동작하는 메서드
+                setOnDateChangeListener { view, year, month, dayOfMonth ->
+                    //달력의 정보를 cal에 담아주고
+                    var cal = Calendar.getInstance()
+                    //년,월,일을 넣어준다
+                    cal.set(year, month, dayOfMonth)
+                    // 설정된 날짜값을 Long 형태의 시간 값으로 가져와 담아준다.
+                    mainActivity.calenderNowTime = cal.timeInMillis
+                }
             }
         }
     }

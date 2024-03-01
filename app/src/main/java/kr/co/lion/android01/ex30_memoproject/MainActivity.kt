@@ -4,10 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.transition.MaterialSharedAxis
 import kr.co.lion.android01.ex30_memoproject.databinding.ActivityMainBinding
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +18,12 @@ class MainActivity : AppCompatActivity() {
 
     var oldFragment:Fragment? = null
     var newFragment:Fragment? = null
+
+    //MainFragment로 돌아올 때 복원을 위한 프로퍼티들!
+    //MainFragment를 통해 보여줄 fragment 이름
+    var mainSubFragmentName = FragmentName2.CALENDER_FRAGMENT
+    //Calender Fragment에서 설정된 날짜를 담는 변수
+    var calenderNowTime = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,6 +133,15 @@ class MainActivity : AppCompatActivity() {
 
         // 지정한 이름으로 있는 Fragment를 BackStack에서 제거한다.
         supportFragmentManager.popBackStack(name.str, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    fun showSoftInput(view: View){
+        view.requestFocus()
+        thread {
+            SystemClock.sleep(200)
+            var inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(view, 0)
+        }
     }
 }
 
