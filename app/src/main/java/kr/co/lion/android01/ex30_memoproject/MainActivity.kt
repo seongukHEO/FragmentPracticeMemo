@@ -150,11 +150,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun reloadRecyclerView2(){
-        if(newFragment is AllMemoFragment){
-            (newFragment as AllMemoFragment).reloadRecyclerView()
-        }
-    }
+//    fun reloadRecyclerView2(){
+//        if(newFragment is AllMemoFragment){
+//            (newFragment as AllMemoFragment).reloadRecyclerView()
+//        }
+//    }
 }
 
 
